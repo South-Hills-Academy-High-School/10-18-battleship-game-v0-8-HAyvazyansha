@@ -5,6 +5,7 @@ namespace SpriteKind {
     export const Boat2 = SpriteKind.create()
 }
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
+    rotateFlage = "nothing"
     grid.move(cursor, 0, -1)
     grid.place(shadowCursor, tiles.getTileLocation(grid.spriteRow(cursor) + 1, grid.spriteCol(cursor)))
 })
@@ -30,20 +31,30 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     }
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
+    rotateFlage = "nothing"
     grid.move(cursor, -1, 0)
     grid.place(shadowCursor, tiles.getTileLocation(grid.spriteCol(cursor) + -1, grid.spriteRow(cursor)))
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
+    rotateFlage = "nothing"
     grid.move(cursor, 1, 0)
     grid.place(shadowCursor, tiles.getTileLocation(grid.spriteCol(cursor) + -1, grid.spriteRow(cursor)))
 })
 function moveBoat (boatArray: any[]) {
     makeBoatVisible(boatArray)
     if (grid.spriteRow(cursor) >= 8 - boatArray.length && boatRotateArray[currentBoat] == "up") {
-        grid.move(cursor, 0, -1)
+        if (rotateFlage != "nothing") {
+            boatRotateArray[currentBoat] = rotateFlage
+        } else {
+            grid.move(cursor, 0, -1)
+        }
     }
     if (grid.spriteCol(cursor) >= 11 - boatArray.length && boatRotateArray[currentBoat] == "sideways") {
-        grid.move(cursor, -1, 0)
+        if (rotateFlage != "nothing") {
+            boatRotateArray[currentBoat] = rotateFlage
+        } else {
+            grid.move(cursor, -1, 0)
+        }
     }
     cursor.setFlag(SpriteFlag.Invisible, true)
     iterator = 0
@@ -57,6 +68,7 @@ function moveBoat (boatArray: any[]) {
     }
 }
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
+    rotateFlage = "nothing"
     grid.move(cursor, 0, 1)
     grid.place(shadowCursor, tiles.getTileLocation(grid.spriteCol(cursor), grid.spriteRow(cursor) + -1))
 })
@@ -92,8 +104,9 @@ let moveBoatFlag = 0
 let boatSpriteArray: Sprite[][] = []
 let boatRotateArray: string[] = []
 let currentBoat = 0
+let rotateFlage = ""
 tiles.setCurrentTilemap(tilemap`level1`)
-let rotateFlage = "nothing"
+rotateFlage = "nothing"
 currentBoat = 0
 boatRotateArray = ["up", "up", "up"]
 boatSpriteArray = [[sprites.create(img`
